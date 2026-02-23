@@ -90,7 +90,7 @@ DATABASES = {
     'default': dj_database_url.config(default=os.getenv("DATABASE_URL")),
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smpt.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = os.getenv("EMAIL_PORT")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
@@ -141,6 +141,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DJOSER = {
     'LOGIN_FIELDS': 'email',
+    'USER_CREATE_PASSWORD_RETYPE': True,
     'SET_PASSWORD_RETYPE': True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
@@ -150,7 +151,12 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}/',
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}/',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {
+        'user_create': 'authentication.serializers.UserCreateSerializer',
+        'user': 'authentication.serializers.UserCreateSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+    }
 }
 
 AUTH_USER_MODEL = "authentication.UserAccount"
